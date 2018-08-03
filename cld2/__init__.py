@@ -195,7 +195,7 @@ _lite_cld2 = _lite_ffi.verify('#include <binding_decls.h>',
                               extra_compile_args=_COMPILER_ARGS)
 
 
-def __establish_languages(ffi, cld):
+def _establish_languages(ffi, cld):
     to_ret = []
     _lingus = cld.cld_languages()
     _codes = cld.cld_langcodes()
@@ -209,7 +209,7 @@ def __establish_languages(ffi, cld):
     return tuple(sorted(to_ret, key=lambda x: x[0]))
 
 
-def __establish_encodings(ffi, cld):
+def _establish_encodings(ffi, cld):
     to_ret = []
     _encodings = cld.cld_supported_encodings()
     for i in six.moves.xrange(cld.cld_num_encodings()):
@@ -219,8 +219,8 @@ def __establish_encodings(ffi, cld):
     return tuple(sorted(to_ret))
 
 
-LANGUAGES = __establish_languages(_full_ffi, _full_cld2)
-ENCODINGS = __establish_encodings(_full_ffi, _full_cld2)
+LANGUAGES = _establish_languages(_full_ffi, _full_cld2)
+ENCODINGS = _establish_encodings(_full_ffi, _full_cld2)
 
 Detections = namedtuple('Detections',
                         ['is_reliable', 'bytes_found', 'details'])
@@ -345,12 +345,12 @@ def detect(utf8Bytes, isPlainText=True, hintTopLevelDomain=None,  # noqa
     ffi = _full_ffi if useFullLangTables else _lite_ffi
 
     if not utf8Bytes:
-        utf8Bytes = ' '
+        utf8Bytes = ' '  # noqa
 
     if six.PY3 and isinstance(utf8Bytes, str):
-        utf8Bytes = utf8Bytes.encode('utf8')
+        utf8Bytes = utf8Bytes.encode('utf8')  # noqa
 
-    def __cstr_or_null(string):
+    def _cstr_or_null(string):
         if not string:
             return ffi.NULL
         if six.PY3 and isinstance(string, str):
@@ -363,10 +363,10 @@ def detect(utf8Bytes, isPlainText=True, hintTopLevelDomain=None,  # noqa
         raise MemoryError()
 
     try:
-        hint_content_lang_box = __cstr_or_null(hintLanguageHTTPHeaders)
-        hint_lang_box = __cstr_or_null(hintLanguage)
-        hint_encoding_box = __cstr_or_null(hintEncoding)
-        hint_tld_box = __cstr_or_null(hintTopLevelDomain)
+        hint_content_lang_box = _cstr_or_null(hintLanguageHTTPHeaders)
+        hint_lang_box = _cstr_or_null(hintLanguage)
+        hint_encoding_box = _cstr_or_null(hintEncoding)
+        hint_tld_box = _cstr_or_null(hintTopLevelDomain)
 
         ret_code = cld2.cld_detect(utf8Bytes, len(utf8Bytes),  # noqa
                                    cld_results, hint_content_lang_box,
