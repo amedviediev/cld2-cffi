@@ -123,7 +123,7 @@ from cffi import FFI
 
 
 _DEBUG = False
-_COMPILER_ARGS = ['-ggdb'] if _DEBUG else ['-O2']
+_COMPILER_ARGS = ['-Wno-narrowing', '-ggdb'] if _DEBUG else ['-O2']
 _LINK_ARGS = []
 if platform.system() == "Darwin":
     # Python builds from Anaconda are built for macOS<10.9
